@@ -1,4 +1,13 @@
-     This is a PL/M to C converter.  It will take most PL/M code and do a nice
+# PL/M to C
+
+Updated & compiled on modern x64 UNIX
+
+Usage:
+```sh
+# ./plm2c /pth/to/src.plm
+```
+
+>This is a PL/M to C converter.  It will take most PL/M code and do a nice
 job of converting it to C.  It tries to be intelligent about leaving formatting
 and comments intact.  This version supports PL/M-286.  It is something I wrote
 about a year ago to convert several meg of source code, and it did a 99.5%
@@ -26,12 +35,11 @@ converter knows it.)  It has some moderate error-recovery, but may well dump
 core if it expects one thing and gets another.
      I've included a garbage file test.plm; typeing "plm2c test.plm" should
 result in a test.c file that is identical to the provided test.c.out.
-     See the file CAVEATS.DOC for compatibility issues.
-
-     Hope you find it useful!
-
-     Robert Ankeney
-     April 9, 1991
-     ...!tektronix!bob@reed.bitnet
+     <br/><br/>
+     See the file CAVEATS.DOC for compatibility issues.<br/>     
+     Hope you find it useful!<br/>
+     Robert Ankeney<br/>
+     April 9, 1991<br/>
+     ...!tektronix!bob@reed.bitnet<br/>
 
 
