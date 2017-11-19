@@ -1,0 +1,86 @@
+# Makefile for IBM-PC MSDOS
+
+SRCS =	convert.c	\
+	parse.c		\
+	declare.c	\
+	decl_out.c	\
+	control.c	\
+	io.c		\
+	token.c		\
+	context.c	\
+	mem.c		\
+	error.c		\
+	version.c	\
+	main.c
+
+OBJS =	convert.obj	\
+	parse.obj	\
+	declare.obj	\
+	decl_out.obj	\
+	control.obj	\
+	io.obj		\
+	token.obj	\
+	context.obj	\
+	mem.obj		\
+	error.obj	\
+	version.obj	\
+	main.obj
+
+LNKS =	convert parse declare decl_out control io token context mem error version main
+
+TOKEN_HDRS = misc.h defs.h struct.h cvt.h cvt_id.h tokens.h
+HDRS =	$(TOKEN_HDRS) tkn_defs.h tkn_ext.h
+
+MDL =	m
+OPTS = -c -N -v -DIBMPC -m$(MDL)
+
+plm2c:	$(OBJS)
+	tlink /c /v c:\tc\lib\c0$(MDL) $(LNKS), plm2c, plm2c, c:\tc\lib\c$(MDL)
+
+convert.obj:	convert.c $(TOKEN_HDRS)
+	tcc $(OPTS) convert
+
+parse.obj:	parse.c $(TOKEN_HDRS) cvt_id.h
+	tcc $(OPTS) parse
+
+declare.obj:	declare.c $(TOKEN_HDRS)
+	tcc $(OPTS) declare
+
+control.obj:	control.c $(TOKEN_HDRS) tkn_ext.h
+	tcc $(OPTS) control
+
+decl_out.obj:	decl_out.c $(TOKEN_HDRS)
+	tcc $(OPTS) decl_out
+
+io.obj:	io.c $(TOKEN_HDRS) tkn_ext.h
+	tcc $(OPTS) io
+
+token.obj:	token.c $(TOKEN_HDRS) tkn_ext.h
+	tcc $(OPTS) token
+
+context.obj:	context.c $(TOKEN_HDRS)
+	tcc $(OPTS) context
+
+mem.obj:	mem.c $(TOKEN_HDRS)
+	tcc $(OPTS) mem
+
+error.obj:	error.c $(TOKEN_HDRS)
+	tcc $(OPTS) error
+
+version.obj:	version.c
+	tcc $(OPTS) version
+
+main.obj:	main.c $(TOKEN_HDRS) tkn_defs.h
+	tcc $(OPTS) main
+
+backup:
+	cp $(HDRS) Makefile bak
+	cp $(SRCS) bak
+
+floppy:
+	cp $(HDRS) makefile a:
+	cp $(SRCS) a:
+
+lint:
+	lint $(SRCS)
+
