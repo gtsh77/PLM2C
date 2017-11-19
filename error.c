@@ -18,7 +18,7 @@ extern	char	current_file_name[];
  *	parse_mesg() -	Print given message, message type, and current
  *			line number.  Skip to error_eol.
  */
-parse_mesg(error_string, error_type, error_eol)
+void parse_mesg(error_string, error_type, error_eol)
 char	*error_string, *error_type;
 char	error_eol;
 {
@@ -82,7 +82,7 @@ char	error_eol;
  *			Called when an unrecognised or unprocessable token
  *			appears.
  */
-parse_error(error_string)
+void parse_error(error_string)
 char	*error_string;
 {
 	if (syntax_error)
@@ -95,7 +95,7 @@ char	*error_string;
 /*
  *	Do a parse_error(), but move to END_OF_LINE, not ';'
  */
-control_error(error_string)
+void control_error(error_string)
 char	*error_string;
 {
 #ifdef IGNORE_CONTROL_ERRORS
@@ -108,7 +108,7 @@ char	*error_string;
 /*
  *	parse_warning - Generate a warning message
  */
-parse_warning(warning_string)
+void parse_warning(warning_string)
 char	*warning_string;
 {
 	parse_mesg(warning_string, "warning", '\0');

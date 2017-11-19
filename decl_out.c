@@ -91,7 +91,7 @@ DECL_MEMBER	*el_ptr;
 /*
  *	Output C declaration list member.
  */
-out_decl_member(decl_list, decl_token)
+void out_decl_member(decl_list, decl_token)
 DECL_MEMBER	*decl_list;
 TOKEN		*decl_token;
 {

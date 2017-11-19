@@ -17,7 +17,7 @@ extern	char	*out_string;
  *	Parse a procedure parameter list.
  *	Return head of linked list of parameters.
  */
-get_param_list(param_head)
+void get_param_list(param_head)
 PARAM_LIST	**param_head;
 {
 	PARAM_LIST	*list_ptr, *param_ptr;
@@ -47,6 +47,7 @@ PARAM_LIST	**param_head;
 		parse_error("')' expected");
 		free_param_list(*param_head);
 	}
+	return;
 }
 
 /*
@@ -56,7 +57,7 @@ PARAM_LIST	**param_head;
  *	param_list and those not.  Return pointers to head of both
  *	DECL_MEMBER lists.
  */
-parse_param_list(param_list, decl_list, extra_decl_list)
+void parse_param_list(param_list, decl_list, extra_decl_list)
 PARAM_LIST	*param_list;
 DECL		**decl_list, **extra_decl_list;
 {
@@ -231,23 +232,25 @@ DECL		**decl_list, **extra_decl_list;
 		free((char *) list);
 
 	}
+	return;
 }
 
 /*
  *	Parse until desired token type appears
  */
-parse_till(type, token)
+void parse_till(type, token)
 int	type;
 TOKEN	*token;
 {
 	while (get_token(token) != type)
 		out_token(token);
+	return;
 }
 
 /*
  *	Parse until END statement
  */
-parse_till_end(token)
+void parse_till_end(token)
 TOKEN	*token;
 {
 	int	token_class;
@@ -265,23 +268,26 @@ TOKEN	*token;
 
 		parse_statement(token);
 	}
+	return;
 }
 
 /*
  *	Parse through END statement
  */
-parse_to_end()
+void parse_to_end()
 {
 	TOKEN	token;
 
 	parse_till_end(&token);
 	parse_statement(&token);
+
+	return;
 }
 
 /*
  *	Check for end of line (';')
  */
-check_eol()
+void check_eol()
 {
 	TOKEN	token;
 
@@ -289,6 +295,7 @@ check_eol()
 		parse_error("';' expected");
 	else
 		out_token(&token);
+	return;
 }
 
 /*
@@ -297,7 +304,7 @@ check_eol()
  *	Returns with next_token terminating variable.
  *	Handles [ .<identifier> ] ...
  */
-parse_simple_variable(token, next_token)
+int parse_simple_variable(token, next_token)
 TOKEN	*token, *next_token;
 {
 	int	token_class;
@@ -319,6 +326,7 @@ TOKEN	*token, *next_token;
 			/* Parse for additional member */
 		return parse_simple_variable(token, next_token);
 	}
+	return 0;
 }
 
 /*
@@ -326,7 +334,7 @@ TOKEN	*token, *next_token;
  *	If variable has BASED attribute, output (*based_name).
  *	Otherwise, output ident.
  */
-out_ident(ident, decl, decl_id)
+void out_ident(ident, decl, decl_id)
 TOKEN		*ident;
 DECL_MEMBER	*decl;
 DECL_ID		*decl_id;
@@ -345,6 +353,7 @@ DECL_ID		*decl_id;
 		out_char(')');
 	} else
 		out_token(ident);
+	return;
 }
 
 /*
@@ -353,7 +362,7 @@ DECL_ID		*decl_id;
  *	Returns with token terminating variable.
  *	Handles <member> { [ ( <expression> ) ] [ .<identifier> ] }
  */
-parse_member(token, decl, decl_id)
+int parse_member(token, decl, decl_id)
 TOKEN		*token;
 DECL_MEMBER	*decl;
 DECL_ID		*decl_id;
@@ -450,7 +459,7 @@ DECL_ID		*decl_id;
  *	Returns with token terminating variable.
  *	Handles { [ ( <expression> ) ] [ .<identifier> ] } ...
  */
-parse_variable(token, var_decl, var_decl_id)
+int parse_variable(token, var_decl, var_decl_id)
 TOKEN		*token;
 DECL_MEMBER	**var_decl;
 DECL_ID		**var_decl_id;
@@ -467,7 +476,7 @@ DECL_ID		**var_decl_id;
  *	See if token is in cvt_list.
  *	If found, return pointer to conversion string.
  */
-check_cvt_id(token, cvt_id, cvt_string)
+int check_cvt_id(token, cvt_id, cvt_string)
 TOKEN	*token;
 CVT_ID	*cvt_id;
 char	**cvt_string;
@@ -477,13 +486,13 @@ char	**cvt_string;
 		if (!strcmp(token->token_name, cvt_id->id_name)) {
 				/* Found match - return new string */
 			*cvt_string = cvt_id->new_id;
-			return TRUE;
+			return 1;
 		}
 
 		cvt_id++;
 	}
 
-	return FALSE;
+	return 0;
 }
 
 /*
@@ -765,7 +774,7 @@ TOKEN	*token;
  *	DO statement
  *	Handles DO;, DO CASE, DO WHILE, and iterative DO
  */
-parse_do(first_token)
+void parse_do(first_token)
 TOKEN	*first_token;
 {
 	TOKEN		token;
@@ -1033,7 +1042,7 @@ TOKEN	*first_token;
  *	CALL statement
  *	Handles CALL <procedure name> [ ( <parameter list> ) ] ;
  */
-parse_call(first_token)
+void parse_call(first_token)
 TOKEN	*first_token;
 {
 	TOKEN		token;
@@ -1139,7 +1148,7 @@ TOKEN	*first_token;
  *		Assignment
  *		Procedure statement
  */
-parse_identifier(first_token)
+void parse_identifier(first_token)
 TOKEN	*first_token;
 {
 	TOKEN		token, next_token;
@@ -1435,7 +1444,7 @@ TOKEN	*first_token;
 /*
  *	ENABLE or DISABLE statement
  */
-parse_int_ctl(first_token)
+void parse_int_ctl(first_token)
 TOKEN	*first_token;
 {
 	TOKEN	token;
@@ -1456,7 +1465,7 @@ TOKEN	*first_token;
  *	OUTPUT, OUTWORD or OUTHWORD statement of form:
  *		OUTPUT(port) = expr;
  */
-parse_outport()
+void parse_outport()
 {
 	TOKEN	token;
 	int	token_class;

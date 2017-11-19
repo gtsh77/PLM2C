@@ -171,7 +171,7 @@ TOKEN	*sep_token;
  *		where:
  *	<member> ::= { <id> | ( <id> [ ,<id> ] ... ) } [ ( <numeric> ) ] <type>
  */
-parse_structure(list_ptr)
+void parse_structure(list_ptr)
 DECL_MEMBER	**list_ptr;
 {
 	DECL_MEMBER	*struct_ptr, *last_struct;

@@ -1,7 +1,6 @@
 #include <stdio.h>
-#ifdef IBMPC
 #include <stdlib.h>
-#endif
+#include <string.h>
 #include "misc.h"
 #include "defs.h"
 #include "cvt.h"
@@ -21,12 +20,15 @@ extern	FILE	*ofd;
 extern	BOOLEAN	parsing_literal;
 extern	TOKEN	literal_token;
 
+void out_char();
+void out_type();
+
 /*
  *	Output data of specified length.
  *	If out_string is not NULL, append string to out_string.
  *	Otherwise write string to stdout.
  */
-out_data(string, length)
+void out_data(string, length)
 char	*string;
 int	length;
 {
@@ -51,7 +53,7 @@ int	length;
 /*
  *	Print white space
  */
-out_white_space(token)
+void out_white_space(token)
 TOKEN	*token;
 {
 	int	length;
@@ -67,7 +69,7 @@ TOKEN	*token;
  *	Print white space, if any.  If start of white space string is not
  *	white, prefix with a space.
  */
-out_must_white(token)
+void out_must_white(token)
 TOKEN	*token;
 {
 	if (!is_white(*(token->white_space_start)))
@@ -79,7 +81,7 @@ TOKEN	*token;
  *	Print all white space up first new-line (if any).
  *	Move white_space_start to point past first new-line.
  */
-out_pre_line(token)
+void out_pre_line(token)
 TOKEN	*token;
 {
 	while ((token->white_space_start < token->white_space_end) &&
@@ -93,7 +95,7 @@ TOKEN	*token;
  *	Print all white space up to but not including last new-line.
  *	Move white_space_start to point to last new-line.
  */
-out_pre_white(token)
+void out_pre_white(token)
 TOKEN	*token;
 {
 	char	*ptr;
@@ -113,12 +115,13 @@ TOKEN	*token;
 		out_data(token->white_space_start, length);
 
 	token->white_space_start = ptr - 1;
+	return;
 }
 
 /*
  *	Output token name
  */
-out_token_name(token)
+void out_token_name(token)
 TOKEN	*token;
 {
 	if (is_a_type(token))
@@ -130,7 +133,7 @@ TOKEN	*token;
 /*
  *	Output white space and token name
  */
-out_token(token)
+void out_token(token)
 TOKEN	*token;
 {
 	out_white_space(token);
@@ -140,7 +143,7 @@ TOKEN	*token;
 /*
  *	Output guaranteed white space and token name
  */
-out_must_token(token)
+void out_must_token(token)
 TOKEN	*token;
 {
 	out_must_white(token);
@@ -150,7 +153,7 @@ TOKEN	*token;
 /*
  *	Output case converted token name
  */
-out_cvt_name(token)
+void out_cvt_name(token)
 TOKEN	*token;
 {
 	char	*ptr;
@@ -169,7 +172,7 @@ TOKEN	*token;
 /*
  *	Output string
  */
-out_str(string)
+void out_str(string)
 char	*string;
 {
 	out_data(string, strlen(string));
@@ -178,7 +181,7 @@ char	*string;
 /*
  *	Output character
  */
-out_char(ch)
+void out_char(ch)
 char	ch;
 {
 	out_data(&ch, 1);
@@ -187,7 +190,7 @@ char	ch;
 /*
  *	Output new-line if not at start of line
  */
-out_to_start()
+void out_to_start()
 {
 	if (last_out_ch != LF)
 		out_char(LF);
@@ -196,7 +199,7 @@ out_to_start()
 /*
  *	Output type
  */
-out_type(type)
+void out_type(type)
 int	type;
 {
 	switch (type) {
@@ -253,7 +256,7 @@ int	type;
 /*
  *	Initialize variables for I/O.
  */
-out_init()
+void out_init()
 {
 	out_string = NULL;
 	last_out_ch = '\0';
@@ -265,7 +268,7 @@ out_init()
  *		'W' << 24 | 'X' << 16 | 'Y' << 8 | Z
  *	where len specifies the number of bytes in the string to output.
  */
-out_str_const(str_ptr, len)
+void out_str_const(str_ptr, len)
 char	*str_ptr;
 int	len;
 {
@@ -288,7 +291,7 @@ int	len;
 /*
  *	Convert NUMERIC constant to octal constant
  */
-cvt_octal(token, octal_string)
+void cvt_octal(token, octal_string)
 TOKEN	*token;
 char	octal_string[];
 {

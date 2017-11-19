@@ -19,7 +19,7 @@ extern	char	*text_ptr;
  *		$ELSEIF
  *		$ENDIF
  */
-parse_control()
+void parse_control()
 {
 	TOKEN		ctl_token, token;
 	int		token_class;

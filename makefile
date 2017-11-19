@@ -31,7 +31,7 @@ LNKS =	convert parse declare decl_out control io token context mem error version
 TOKEN_HDRS = misc.h defs.h struct.h cvt.h cvt_id.h tokens.h
 HDRS =	$(TOKEN_HDRS) tkn_defs.h tkn_ext.h
 
-OPTS = -c -O
+OPTS = -std=c90 -c -O
 
 plm2c:	$(OBJS)
 	$(CC) -o plm2c $(OBJS)
